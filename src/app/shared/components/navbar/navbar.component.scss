@@ -1,0 +1,74 @@
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(90deg, #0f6b4b, #178a62);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(15, 107, 75, 0.3);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+}
+
+.nombre strong {
+  font-weight: 600;
+  color: #b8f0d6;
+}
+
+.relleno {
+  flex: 1;
+}
+
+.enlaces {
+  display: flex;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.enlace {
+  color: #d8f3e6;
+  border-radius: 999px;
+
+  &.activo {
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+  }
+}
+
+.usuario {
+  font-size: 0.85rem;
+  margin-right: 4px;
+  opacity: 0.9;
+}
+
+@media (max-width: 599px) {
+  .enlace .texto {
+    display: none;
+  }
+
+  .enlace {
+    min-width: 0;
+    padding: 0 10px;
+  }
+}
+
+.enlace.mat-mdc-button,
+.barra button[aria-label='Cerrar sesión'] {
+  color: #fff;
+}
+
+@media (max-width: 599px) {
+  .enlace mat-icon {
+    margin: 0;
+  }
+}

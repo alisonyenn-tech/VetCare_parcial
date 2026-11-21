@@ -1,0 +1,45 @@
+<section class="login" aria-labelledby="titulo-login">
+  <mat-card class="panel formulario" appearance="outlined">
+    <mat-card-content>
+      <h1 id="titulo-login">Iniciar sesión</h1>
+
+      <form [formGroup]="form" (ngSubmit)="ingresar()" novalidate>
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Admin</mat-label>
+          <input matInput formControlName="usuario" placeholder="admin" autocomplete="username" />
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error>Escribe tu usuario.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            formControlName="clave"
+            autocomplete="current-password"
+            [type]="ocultarClave ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            [attr.aria-label]="ocultarClave ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            (click)="ocultarClave = !ocultarClave"
+          >
+            <mat-icon>{{ ocultarClave ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error>Escribe tu contraseña.</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="credencialesIncorrectas" class="aviso aviso-error" role="alert">
+          Usuario o contraseña incorrectos.
+        </div>
+
+        <button mat-flat-button color="primary" type="submit" class="campo-completo boton">
+          Ingresar
+        </button>
+      </form>
+
+    </mat-card-content>
+  </mat-card>
+</section>

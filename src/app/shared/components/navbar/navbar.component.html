@@ -1,0 +1,28 @@
+<mat-toolbar class="barra">
+  <a class="marca" routerLink="/">
+    <span class="logo">🐾</span>
+    <span class="nombre">Vet<strong>Care</strong></span>
+  </a>
+
+  <span class="relleno"></span>
+
+  <ng-container *ngIf="usuario$ | async as usuario">
+    <nav class="enlaces">
+      <a
+        *ngFor="let e of enlaces"
+        mat-button
+        class="enlace"
+        [routerLink]="e.ruta"
+        routerLinkActive="activo"
+      >
+        <mat-icon>{{ e.icono }}</mat-icon>
+        <span class="texto">{{ e.texto }}</span>
+      </a>
+    </nav>
+
+    <span class="usuario solo-escritorio">{{ usuario }}</span>
+    <button mat-icon-button type="button" matTooltip="Cerrar sesión" aria-label="Cerrar sesión" (click)="salir()">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </ng-container>
+</mat-toolbar>

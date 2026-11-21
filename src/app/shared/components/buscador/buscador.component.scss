@@ -1,0 +1,33 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/forms/labels';
+@import 'bootstrap/scss/forms/form-control';
+@import 'bootstrap/scss/forms/input-group';
+$theme-colors: ('success': $success);
+@import 'bootstrap/scss/buttons';
+
+:host {
+  --bs-body-color: #183c34;
+  --bs-body-bg: #fff;
+  --bs-border-width: 1px;
+  --bs-border-color: #adcbc1;
+  --bs-border-radius: 0.65rem;
+  --bs-tertiary-bg: #e6f5ee;
+  --bs-btn-font-family: inherit;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+
+.input-group-text,
+.form-control,
+.btn {
+  min-height: 48px;
+  font-family: inherit;
+}

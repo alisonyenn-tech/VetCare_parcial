@@ -1,0 +1,106 @@
+.tarjeta-mascota {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15, 107, 75, 0.15);
+  }
+
+  mat-card-content {
+    flex: 1;
+  }
+}
+
+.cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.dueno {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+
+  mat-icon {
+    color: var(--verde);
+  }
+
+  strong {
+    display: block;
+    font-weight: 500;
+  }
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.dato-citas {
+  --dato-fondo: #def0ff;
+  --dato-icono: #195883;
+}
+
+.dato-proximas {
+  --dato-fondo: #fff0cf;
+  --dato-icono: #895407;
+}
+
+.dato-atenciones {
+  --dato-fondo: #eee5fb;
+  --dato-icono: #623b89;
+}
+
+.tarjeta-mascota {
+  --ficha-acento: #258375;
+  --ficha-fondo: #eff9f4;
+  overflow: hidden;
+  background: #fff;
+  border-color: #d9e7e2;
+  border-top: 4px solid var(--ficha-acento);
+  box-shadow: 0 5px 17px rgb(22 66 57 / 7%);
+
+  &[data-especie='gato'] {
+    --ficha-acento: #9164b7;
+    --ficha-fondo: #f7f1fc;
+  }
+
+  &[data-especie='ave'] {
+    --ficha-acento: #bb791d;
+    --ficha-fondo: #fff7e8;
+  }
+
+  mat-divider {
+    border-top-color: #dce8e2;
+  }
+}
+
+.cabecera {
+  min-height: 82px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--ficha-fondo);
+  overflow-wrap: anywhere;
+}
+
+.dueno {
+  overflow-wrap: anywhere;
+}
+
+.acciones {
+  margin-top: 12px;
+}

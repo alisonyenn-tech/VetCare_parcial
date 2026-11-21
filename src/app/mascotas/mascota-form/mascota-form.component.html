@@ -1,0 +1,104 @@
+<app-encabezado-pagina
+  titulo="Registrar mascota y dueño"
+  subtitulo="Completa los datos para crear la ficha"
+  icono="pets"
+>
+  <a mat-stroked-button routerLink="/mascotas"><mat-icon>arrow_back</mat-icon> Volver</a>
+</app-encabezado-pagina>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <div class="dos-columnas">
+    <!-- Datos de la mascota -->
+    <mat-card class="panel" appearance="outlined">
+      <mat-card-content>
+        <div class="titulo-seccion">
+          <app-avatar-mascota [especie]="form.controls.especie.value" [tamano]="52" />
+          <div>
+            <h2>Datos de la mascota</h2>
+            <span class="ayuda">{{ form.controls.nombre.value || 'Nombre de la mascota' }}</span>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre" />
+          <mat-error>Escribe el nombre (mínimo 2 letras).</mat-error>
+        </mat-form-field>
+
+        <div class="fila">
+          <mat-form-field appearance="outline">
+            <mat-label>Especie</mat-label>
+            <mat-select formControlName="especie">
+              <mat-option *ngFor="let e of especies" [value]="e">{{ e | titlecase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Raza</mat-label>
+            <input matInput formControlName="raza" />
+            <mat-hint>Puede ser "Mestizo"</mat-hint>
+            <mat-error>Indica la raza.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Fecha de nacimiento</mat-label>
+          <input matInput type="date" formControlName="fechaNacimiento" [max]="hoy" />
+          <mat-error *ngIf="tieneError('fechaNacimiento', 'required')">
+            Indica la fecha de nacimiento.
+          </mat-error>
+          <mat-error *ngIf="tieneError('fechaNacimiento', 'fechaFutura')">
+            La fecha no puede ser posterior a hoy.
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Datos del dueño -->
+    <mat-card class="panel" appearance="outlined" formGroupName="dueno">
+      <mat-card-content>
+        <div class="titulo-seccion">
+          <span class="icono-caja"><mat-icon>person</mat-icon></span>
+          <div>
+            <h2>Datos del dueño</h2>
+            <span class="ayuda">Contacto para recordatorios y avisos</span>
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Nombre completo</mat-label>
+          <input matInput formControlName="nombre" />
+          <mat-error>Escribe el nombre completo del dueño.</mat-error>
+        </mat-form-field>
+
+        <div class="fila">
+          <mat-form-field appearance="outline">
+            <mat-label>DNI</mat-label>
+            <input matInput formControlName="dni" inputmode="numeric" maxlength="8" />
+            <mat-error>El DNI debe tener 8 dígitos.</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Celular</mat-label>
+            <input matInput formControlName="telefono" type="tel" inputmode="numeric" maxlength="9" />
+            <mat-error>Debe tener 9 dígitos y empezar con 9.</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" type="email" placeholder="nombre&#64;correo.com" />
+          <mat-icon matSuffix>mail</mat-icon>
+          <mat-error>Escribe un correo válido.</mat-error>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="acciones-formulario">
+    <a mat-stroked-button routerLink="/mascotas">Cancelar</a>
+    <button mat-flat-button color="primary" type="submit">
+      <mat-icon>save</mat-icon> Guardar mascota
+    </button>
+  </div>
+</form>

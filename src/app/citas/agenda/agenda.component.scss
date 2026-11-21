@@ -1,0 +1,137 @@
+.titulo {
+  margin: 0 0 12px;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.calendario {
+  max-width: 340px;
+  margin: 0 auto;
+  border: 1px solid #dde7e2;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.leyenda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 8px 0 0;
+}
+
+.punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--naranja);
+}
+
+.subtitulo-horarios {
+  margin: 20px 0 4px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.texto-error {
+  margin: 4px 0 0;
+  color: #b3261e;
+  font-size: 0.8rem;
+}
+
+.motivo {
+  margin-top: 16px;
+}
+
+.boton {
+  height: 48px;
+  font-size: 1rem;
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cita-contenido {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cita-datos {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fecha {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--verde-oscuro);
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.reserva,
+.proximas {
+  padding: 12px;
+  border: 1px solid #d9e8e3;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgb(22 66 57 / 7%);
+}
+
+.proximas {
+  padding: 20px;
+
+  .cita {
+    background: #f6fbf9;
+    border-color: #dceae4;
+  }
+}
+
+.detalle-reserva {
+  display: grid;
+  gap: 16px;
+}
+
+.calendario {
+  background: #f5fbf8;
+}
+
+.horarios {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+}
+
+.slot {
+  min-width: 0;
+  padding-inline: 4px;
+}
+
+@media (min-width: 900px) {
+  .agenda {
+    grid-template-columns: minmax(0, 2.35fr) minmax(265px, 1fr);
+  }
+
+  .detalle-reserva {
+    grid-template-columns: minmax(225px, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .subtitulo-horarios {
+    margin-top: 0;
+  }
+}

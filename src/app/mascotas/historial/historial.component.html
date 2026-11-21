@@ -1,0 +1,141 @@
+<app-encabezado-pagina
+  titulo="Historial de atención"
+  subtitulo="Todas las citas y atenciones de la mascota"
+  icono="history"
+>
+  <a mat-stroked-button routerLink="/mascotas"><mat-icon>arrow_back</mat-icon> Volver</a>
+</app-encabezado-pagina>
+
+<ng-container *ngIf="mascota; else noEncontrada">
+  <!-- Ficha de la mascota -->
+  <mat-card class="panel ficha" appearance="outlined">
+    <mat-card-content>
+      <div class="ficha-principal">
+        <app-avatar-mascota [especie]="mascota.especie" [tamano]="72" />
+        <div>
+          <h2>{{ mascota.nombre }}</h2>
+          <p class="ayuda">{{ mascota.descripcion }} · {{ mascota.fechaNacimiento | edadMascota }}</p>
+        </div>
+        <a
+          mat-flat-button
+          color="primary"
+          class="boton-cita"
+          routerLink="/citas"
+          [queryParams]="{ mascotaId: mascota.id }"
+        >
+          <mat-icon>event</mat-icon> Agendar cita
+        </a>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="ficha-dueno">
+        <span><mat-icon>person</mat-icon> {{ mascota.dueno.nombre }}</span>
+        <span><mat-icon>badge</mat-icon> DNI {{ mascota.dueno.dni }}</span>
+        <span><mat-icon>call</mat-icon> {{ mascota.dueno.telefono }}</span>
+        <span><mat-icon>mail</mat-icon> {{ mascota.dueno.email }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-container *ngIf="vista$ | async as vista">
+    <div class="rejilla-estadisticas">
+      <app-tarjeta-dato [valor]="vista.total" etiqueta="Citas en total" icono="event_note" />
+      <app-tarjeta-dato [valor]="vista.atendidas" etiqueta="Atenciones" icono="medical_services" />
+      <app-tarjeta-dato [valor]="vista.pendientes" etiqueta="Pendientes" icono="schedule" />
+    </div>
+
+    <h2 class="subtitulo">Línea de tiempo</h2>
+
+    <app-estado-vacio
+      *ngIf="vista.lista.length === 0"
+      icono="event_busy"
+      titulo="Aún no hay atenciones"
+      mensaje="Cuando se agende y atienda una cita, aparecerá aquí."
+    >
+      <a mat-flat-button color="primary" routerLink="/citas" [queryParams]="{ mascotaId: mascota.id }">
+        Agendar la primera cita
+      </a>
+    </app-estado-vacio>
+
+    <div class="linea">
+      <mat-card
+        *ngFor="let c of vista.lista"
+        class="panel registro"
+        [ngClass]="c.estado"
+        appearance="outlined"
+        [appResaltarProxima]="c"
+      >
+        <mat-card-content>
+          <div class="registro-cabecera">
+            <div>
+              <strong>{{ c.fecha | fechaCorta: c.hora }}</strong>
+              <div class="ayuda">{{ c.motivo }}</div>
+            </div>
+            <app-estado-chip [estado]="c.estado" />
+          </div>
+
+          <!-- Resultado de la atención -->
+          <div *ngIf="c.estaAtendida" class="resultado">
+            <div>
+              <span class="rotulo">Diagnóstico</span>
+              <p>{{ c.diagnostico }}</p>
+            </div>
+            <div>
+              <span class="rotulo">Tratamiento</span>
+              <p>{{ c.tratamiento }}</p>
+            </div>
+          </div>
+
+          <!-- Registrar atención de una cita pendiente -->
+          <ng-container *ngIf="c.estaPendiente">
+            <button
+              *ngIf="atendiendoId !== c.id"
+              mat-stroked-button
+              type="button"
+              class="boton-atencion"
+              (click)="iniciarAtencion(c.id)"
+            >
+              <mat-icon>medical_services</mat-icon> Registrar atención
+            </button>
+
+            <form
+              *ngIf="atendiendoId === c.id"
+              [formGroup]="formAtencion"
+              (ngSubmit)="guardarAtencion()"
+              class="form-atencion"
+              novalidate
+            >
+              <mat-form-field appearance="outline" class="campo-completo">
+                <mat-label>Diagnóstico</mat-label>
+                <textarea matInput rows="2" formControlName="diagnostico"></textarea>
+                <mat-error>Describe el diagnóstico (mínimo 5 letras).</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="campo-completo">
+                <mat-label>Tratamiento</mat-label>
+                <textarea matInput rows="2" formControlName="tratamiento"></textarea>
+                <mat-error>Describe el tratamiento (mínimo 5 letras).</mat-error>
+              </mat-form-field>
+
+              <div class="acciones-formulario">
+                <button mat-stroked-button type="button" (click)="cerrarAtencion()">Cancelar</button>
+                <button mat-flat-button color="primary" type="submit">Guardar atención</button>
+              </div>
+            </form>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #noEncontrada>
+  <app-estado-vacio
+    icono="search_off"
+    titulo="No encontramos esa mascota"
+    mensaje="Puede que haya sido eliminada o que el enlace sea incorrecto."
+  >
+    <a mat-flat-button color="primary" routerLink="/mascotas">Ir a la lista de mascotas</a>
+  </app-estado-vacio>
+</ng-template>

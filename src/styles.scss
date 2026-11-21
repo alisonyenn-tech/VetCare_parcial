@@ -1,0 +1,248 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Tema verde (colores de una clínica veterinaria) con Angular Material
+$tema: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: (
+      brand-family: 'Poppins, sans-serif',
+      plain-family: 'Poppins, sans-serif',
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+
+html {
+  color-scheme: light;
+  @include mat.all-component-themes($tema);
+}
+
+:root {
+  --verde: #178a62;
+  --verde-oscuro: #0f6b4b;
+  --verde-claro: #e6f5ee;
+  --naranja: #f59e0b;
+  --texto: #1f2d27;
+  --texto-suave: #5f6f68;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--texto);
+  background: linear-gradient(180deg, #eef8f3 0%, #f7faf8 260px);
+  background-attachment: fixed;
+}
+
+// ---------- Estructura general ----------
+.contenedor {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: 16px;
+}
+
+.rejilla-estadisticas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .dos-columnas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.subtitulo {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 32px 0 12px;
+}
+
+.panel {
+  border-radius: 16px !important;
+}
+
+.campo-completo {
+  width: 100%;
+}
+
+.acciones-formulario {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pie {
+  text-align: center;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  padding: 24px 16px;
+}
+
+// ---------- Textos y avisos ----------
+.aviso {
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+.aviso-error {
+  background: #fdecea;
+  color: #8a1c14;
+}
+
+.aviso-info {
+  background: var(--verde-claro);
+  color: var(--verde-oscuro);
+}
+
+.ayuda {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+// ---------- Horarios de la agenda ----------
+.horarios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+
+.slot {
+  min-width: 72px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--verde);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--verde-oscuro);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover:not(:disabled) {
+    background: var(--verde-claro);
+  }
+
+  &.seleccionado {
+    background: var(--verde);
+    color: #fff;
+  }
+
+  &:disabled {
+    border-color: #d5dbd8;
+    color: #a3aea9;
+    background: #f1f3f2;
+    text-decoration: line-through;
+    cursor: not-allowed;
+  }
+}
+
+// Días del calendario que ya tienen citas pendientes
+.dia-con-citas .mat-calendar-body-cell-content {
+  position: relative;
+}
+
+.dia-con-citas .mat-calendar-body-cell-content::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--naranja);
+}
+
+// Cita pendiente dentro de las próximas horas (directiva appResaltarProxima)
+.cita-proxima {
+  background: #fff8e6 !important;
+  border-left: 5px solid var(--naranja) !important;
+}
+
+// Elementos que se ocultan en pantallas pequeñas
+@media (max-width: 599px) {
+  .solo-escritorio {
+    display: none !important;
+  }
+}
+
+// La foto aparece únicamente mientras está montada la lista o la agenda.
+body:has(app-mascota-list, app-agenda, app-mascota-form) {
+  background-color: #eaf6f2;
+  background-image:
+    linear-gradient(90deg, #edf8f466 0%, #f5fbf8e8 23%, #f5fbf8f2 50%, #f5fbf8e8 77%, #edf8f466 100%),
+    url('./assets/perritos-login.png');
+  background-position: center, center bottom;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 767px) {
+  body:has(app-mascota-list, app-agenda, app-mascota-form) {
+    background-image: linear-gradient(#f4fbf8aa, #f4fbf877), url('./assets/perritos-login.png');
+    background-size: cover, 100% auto;
+  }
+}
+
+// Atlas de ilustraciones decorativas, compartido por las pantallas internas.
+.vet-icono {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: url('./assets/iconos-vetcare.png') 50% 50% / 300% 300% no-repeat;
+
+  &[data-icono='perro'] { background-position: 0 0; }
+  &[data-icono='gato'] { background-position: 50% 0; }
+  &[data-icono='ave'] { background-position: 100% 0; }
+  &[data-icono='conejo'] { background-position: 0 50%; }
+  &[data-icono='event'] { background-position: 100% 50%; }
+  &[data-icono='notifications_active'] { background-position: 0 100%; }
+  &[data-icono='medical_services'] { background-position: 50% 100%; }
+  &[data-icono='search'] { background-position: 100% 100%; }
+}
+
+.vet-avatar {
+  border-radius: 50%;
+  vertical-align: middle;
+}

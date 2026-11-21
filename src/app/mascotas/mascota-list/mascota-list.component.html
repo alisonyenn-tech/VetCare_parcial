@@ -1,0 +1,71 @@
+<app-encabezado-pagina
+  titulo="Mascotas registradas"
+  subtitulo="Busca una mascota para ver su historial o agendar una cita"
+  icono="pets"
+>
+  <a mat-flat-button color="primary" routerLink="/mascotas/nueva">
+    <mat-icon>add</mat-icon> Registrar mascota
+  </a>
+</app-encabezado-pagina>
+
+<div class="rejilla-estadisticas" *ngIf="resumen$ | async as r">
+  <app-tarjeta-dato [valor]="r.mascotas" etiqueta="Mascotas" icono="pets" />
+  <app-tarjeta-dato [valor]="r.pendientes" class="dato-citas" etiqueta="Citas pendientes" icono="event" />
+  <app-tarjeta-dato [valor]="r.proximas" class="dato-proximas" etiqueta="En las próximas 24 h" icono="notifications_active" />
+  <app-tarjeta-dato [valor]="r.atendidas" class="dato-atenciones" etiqueta="Atenciones realizadas" icono="medical_services" />
+</div>
+
+<app-buscador
+  campoId="buscar-mascota"
+  etiqueta="Buscar por mascota, dueño o DNI"
+  ejemplo="Ej. Firulais"
+  (textoCambiado)="busqueda.setValue($event)"
+/>
+
+<ng-container *ngIf="mascotas$ | async as mascotas">
+  <app-estado-vacio
+    *ngIf="mascotas.length === 0"
+    icono="search_off"
+    titulo="No encontramos mascotas"
+    mensaje="Prueba con otro nombre o registra una mascota nueva."
+  >
+    <a mat-flat-button color="primary" routerLink="/mascotas/nueva">Registrar mascota</a>
+  </app-estado-vacio>
+
+  <div class="rejilla" *ngIf="mascotas.length > 0">
+    <mat-card *ngFor="let m of mascotas" class="panel tarjeta-mascota" [attr.data-especie]="m.especie" appearance="outlined">
+      <mat-card-content>
+        <div class="cabecera">
+          <app-avatar-mascota [especie]="m.especie" [tamano]="56" />
+          <div>
+            <h2>{{ m.nombre }}</h2>
+            <span class="ayuda">{{ m.descripcion }} · {{ m.fechaNacimiento | edadMascota }}</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="dueno">
+          <mat-icon>person</mat-icon>
+          <div>
+            <strong>{{ m.dueno.nombre }}</strong>
+            <span class="ayuda">{{ m.dueno.etiqueta }}</span>
+          </div>
+        </div>
+        <div class="dueno">
+          <mat-icon>call</mat-icon>
+          <span>{{ m.dueno.telefono }}</span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions class="acciones">
+        <a mat-stroked-button [routerLink]="['/mascotas', m.id, 'historial']">
+          <mat-icon>history</mat-icon> Historial
+        </a>
+        <a mat-flat-button color="primary" routerLink="/citas" [queryParams]="{ mascotaId: m.id }">
+          <mat-icon>event</mat-icon> Agendar cita
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</ng-container>

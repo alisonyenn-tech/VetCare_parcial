@@ -1,0 +1,124 @@
+<app-encabezado-pagina
+  titulo="Agenda de citas"
+  subtitulo="Elige un día en el calendario y reserva un horario disponible"
+  icono="event"
+/>
+
+<div class="dos-columnas agenda">
+  <!-- Formulario + calendario + horarios -->
+  <mat-card class="panel reserva" appearance="outlined">
+    <mat-card-content>
+      <h2 class="titulo">Agendar una cita</h2>
+
+      <form [formGroup]="form" (ngSubmit)="agendar()" novalidate>
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Mascota</mat-label>
+          <mat-select formControlName="mascotaId">
+            <mat-option [value]="0" disabled>Selecciona una mascota</mat-option>
+            <mat-option *ngFor="let m of mascotas$ | async" [value]="m.id">
+              {{ m.nombre }} · {{ m.dueno.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Elige la mascota que será atendida.</mat-error>
+        </mat-form-field>
+
+        <div class="detalle-reserva">
+          <div>
+            <div class="calendario">
+              <mat-calendar
+                [selected]="fechaSeleccionada"
+                [minDate]="minFecha"
+                [dateClass]="clasesDia"
+                (selectedChange)="elegirDia($event)"
+              ></mat-calendar>
+            </div>
+            <p class="ayuda leyenda"><span class="punto"></span> Días con citas pendientes</p>
+          </div>
+          <div class="seleccion-horario">
+            <h3 class="subtitulo-horarios">
+              Horarios del {{ form.controls.fecha.value | fechaCorta }}
+            </h3>
+            <div class="horarios">
+              <button
+                *ngFor="let h of horarios$ | async"
+                type="button"
+                class="slot"
+                [class.seleccionado]="form.controls.hora.value === h.hora"
+                [disabled]="h.ocupada || h.pasada"
+                [attr.aria-label]="h.ocupada ? h.hora + ' ocupado' : h.hora"
+                (click)="seleccionarHora(h.hora)"
+              >
+                {{ h.hora }}
+              </button>
+            </div>
+            <p class="ayuda">Los horarios tachados ya están ocupados o ya pasaron.</p>
+            <p *ngIf="form.controls.hora.invalid && form.controls.hora.touched" class="texto-error">
+              Elige una hora para la cita.
+            </p>
+
+            <mat-form-field appearance="outline" class="campo-completo motivo">
+              <mat-label>Motivo de la consulta</mat-label>
+              <textarea
+                matInput
+                rows="2"
+                formControlName="motivo"
+                placeholder="Ej: vacuna, control, no quiere comer"
+              ></textarea>
+              <mat-error>Cuéntanos el motivo (mínimo 5 letras).</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="error" class="aviso aviso-error" role="alert">{{ error }}</div>
+
+        <button mat-flat-button color="primary" type="submit" class="campo-completo boton">
+          <mat-icon>event_available</mat-icon> Agendar cita
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Próximas citas -->
+  <section class="proximas">
+    <h2 class="titulo">Próximas citas</h2>
+    <p class="ayuda">Las citas dentro de las próximas 24 horas se resaltan en amarillo.</p>
+
+    <ng-container *ngIf="proximas$ | async as proximas">
+      <app-estado-vacio
+        *ngIf="proximas.length === 0"
+        icono="event_available"
+        titulo="No hay citas pendientes"
+        mensaje="Agenda la primera usando el calendario."
+      />
+
+      <div class="lista">
+        <mat-card
+          *ngFor="let item of proximas"
+          class="panel cita"
+          appearance="outlined"
+          [appResaltarProxima]="item.cita"
+        >
+          <mat-card-content class="cita-contenido">
+            <app-avatar-mascota *ngIf="item.mascota" [especie]="item.mascota.especie" [tamano]="44" />
+            <div class="cita-datos">
+              <strong>{{ item.mascota?.nombre ?? 'Mascota eliminada' }}</strong>
+              <span class="ayuda">{{ item.cita.motivo }}</span>
+              <span class="fecha">
+                <mat-icon>schedule</mat-icon> {{ item.cita.fecha | fechaCorta: item.cita.hora }}
+              </span>
+            </div>
+            <button
+              mat-icon-button
+              type="button"
+              matTooltip="Cancelar cita"
+              aria-label="Cancelar cita"
+              (click)="cancelar(item.cita.id)"
+            >
+              <mat-icon>event_busy</mat-icon>
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </ng-container>
+  </section>
+</div>
